@@ -59,6 +59,18 @@ const lv_img_dsc_t *anim_imgs[] = {
 };
 #endif
 
+#if IS_ENABLED(CONFIG_NICE_OLED_USAGI_ANIMATION)
+// 01 to 02
+LV_IMG_DECLARE(usagi_01);
+LV_IMG_DECLARE(usagi_02);
+LV_IMG_DECLARE(usagi_03);
+LV_IMG_DECLARE(usagi_04);
+
+const lv_img_dsc_t *anim_imgs[] = {
+    &usagi_01, &usagi_02, &usagi_03, &usagi_04,
+};
+#endif
+
 // NICE_OLEDE_OLED
 #if IS_ENABLED(CONFIG_NICE_OLED_VIM)
 LV_IMG_DECLARE(vim);
@@ -90,6 +102,19 @@ void draw_animation(lv_obj_t *canvas, struct zmk_widget_screen *widget) {
 
   lv_animimg_set_src(art, (const void **)anim_imgs, 20);
   lv_animimg_set_duration(art, CONFIG_NICE_OLED_POKEMON_ANIMATION_MS);
+  lv_animimg_set_repeat_count(art, LV_ANIM_REPEAT_INFINITE);
+  lv_animimg_start(art);
+
+  // fix the error compiling if the images are not used
+  lv_obj_t *art2 = NULL; // Para la segunda imagen, si es necesario
+#endif
+
+#if IS_ENABLED(CONFIG_NICE_OLED_USAGI_ANIMATION)
+  lv_obj_t *art = lv_animimg_create(widget->obj);
+  lv_obj_center(art);
+
+  lv_animimg_set_src(art, (const void **)anim_imgs, 4);
+  lv_animimg_set_duration(art, CONFIG_NICE_OLED_USAGI_ANIMATION_MS);
   lv_animimg_set_repeat_count(art, LV_ANIM_REPEAT_INFINITE);
   lv_animimg_start(art);
 
@@ -129,6 +154,9 @@ void draw_animation(lv_obj_t *canvas, struct zmk_widget_screen *widget) {
 #endif
 #if IS_ENABLED(CONFIG_NICE_OLED_POKEMON_ANIMATION)
     lv_obj_align(art, LV_ALIGN_TOP_LEFT, -18, -18);
+#endif
+#if IS_ENABLED(CONFIG_NICE_OLED_USAGI_ANIMATION)
+    lv_obj_align(art, LV_ALIGN_TOP_LEFT, 2, -4);
 #endif
 #if IS_ENABLED(CONFIG_NICE_OLED_VIM)
     lv_obj_align(art, LV_ALIGN_TOP_LEFT, 0, 0);
